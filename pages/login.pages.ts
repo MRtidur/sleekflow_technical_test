@@ -18,7 +18,7 @@ export class LoginPage {
     }
 
     async continue(){
-        await this.page.getByRole('button', {name: 'Continue', exact: true}).click();
+        await this.page.locator('button[type="submit"][name="action"]').click();
     }
 
     async fillPassword(password: string){
