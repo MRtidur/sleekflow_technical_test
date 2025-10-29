@@ -1,8 +1,10 @@
 
 
 # 🎤 Technical Interview Answers — Playwright (Sleekflow.io Automation)
+<br>
 
----
+
+# **Part 1: (Playwright - Signup & Login Automation test for sleekflow.io)**
 
 ## **1. Project Setup**
 
@@ -35,7 +37,7 @@ For this project, I mainly targeted **Chromium**, and ran in both **headless** a
 
 ### **Signup Flow**
 
-> **When I planned the Signup flow, I started by mapping each critical element of the process, then expanded it into test coverage.**
+**When I planned the Signup flow, I started by mapping each critical element of the process, then expanded it into test coverage.**
 
 Since Sleekflow uses an SSO-based signup (`https://sso.sleekflow.io/u/signup/password`), the signup process includes:
 
@@ -249,7 +251,7 @@ here the link of deployed report: https://mrtidur.github.io/sleekflow_technical_
 
 ## **9. Error Handling**
 
-> *“For failure analysis, I enabled screenshot, video, and trace capture in Playwright.”*
+**For failure analysis, I enabled screenshot, video, and trace capture in Playwright.**
 
 In my `playwright.config.ts`:
 
@@ -262,4 +264,118 @@ use: {
 ```
 
 So when a test fails, I can replay the trace or watch the video step-by-step to pinpoint what went wrong — which is especially useful for debugging async flows or flaky selectors.
+
+
+---
+
+<br>
+
+# **Part 2: Test Case Design and Bug Reporting**
+
+---
+
+## **1️⃣ Manual Test Case Design**
+
+Below are three representative **manual test cases** based on the actual Sleekflow signup and login behavior.
+
+---
+
+### **Test Case 1 – Verify Signup with Invalid Email Format**
+
+| **Field**           | **Details**                                                                                                                             |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Test Case ID**    | TC_SIGNUP_001                                                                                                                           |
+| **Test Objective**  | Verify Signup with invalid email format                                                                |
+| **Preconditions**   | The user is on the Sleekflow Signup page (`https://sso.sleekflow.io/u/signup/password`).                                                |
+| **Test Steps**      | 1. Open the signup page.<br>2. Enter an invalid email format, e.g., `test@invalid`.<br>3. Click the **Sign Up** button. |
+| **Expected Result** | The system displays an inline validation message: **“Email is not valid.”** The signup process does not proceed to the next step.       |
+
+---
+
+### **Test Case 2 – Verify Signup with Weak Password**
+
+| **Field**           | **Details**                                                                                                                                                                             |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Test Case ID**    | TC_SIGNUP_002                                                                                                                                                                           |
+| **Test Objective**  | To confirm that weak passwords are rejected during signup.                                                                                                                              |
+| **Preconditions**   | The user is on the Sleekflow Signup page with a valid email entered.                                                                                                       |
+| **Test Steps**      | 1. Enter a valid email (e.g., `testuser@domain.com`).<br>2. Click the **Sign Up** button.<br>3. Enter a valid username (e.g., `testuser`).<br>4. Enter a weak password (e.g., `12345`).<br>5. Click the **Sign Up** button. |
+| **Expected Result** | The system displays an error message such as **“The password is too weak.”** The account is not created.                                                                                |
+
+---
+
+### **Test Case 3 – Verify Login with Valid Credentials**
+
+| **Field**           | **Details**                                                                                                                                                                                                           |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Test Case ID**    | TC_LOGIN_001                                                                                                                                                                                                          |
+| **Test Objective**  | To verify successful login with valid credentials and proper redirection to the inbox.                                                                                                                                |
+| **Preconditions**   | A valid user account already exists in the system.                                                                                                                                                                    |
+| **Test Steps**      | 1. Navigate to `https://sso.sleekflow.io/u/login`.<br>2. Enter a valid email (e.g., `qa_user@sleekflow.io`).<br>3. Click **Continue**.<br>4. Enter a valid password (e.g., `ValidPass@123`).<br>5. Click **Sign In**. |
+| **Expected Result** | The system authenticates the user and redirects to the Sleekflow Inbox page (`/en/inbox`). The session should remain active after login.                                                                              |
+
+---
+
+## **2️⃣ Sample Bug Report**
+
+---
+
+### 🐞 **Bug Title:**
+
+Login button unresponsive after entering valid credentials
+
+---
+
+### **Environment:**
+
+* **Browser:** Google Chrome 141.0.0.0
+* **OS:** macOS Monterey 12.6
+* **Environment URL:** `https://sso.sleekflow.io/u/login`
+
+---
+
+### **Steps to Reproduce:**
+
+1. Open the Sleekflow Login page.
+2. Enter a **valid email address** (e.g., `qa_user@sleekflow.io`).
+3. Click **Continue**.
+4. Enter a **valid password** (e.g., `ValidPass@123`).
+5. Click the **Login** button.
+
+---
+
+### **Expected Result:**
+
+* The system should authenticate the user and redirect to `/en/inbox`.
+* If credentials are invalid, an appropriate error message should be displayed.
+
+---
+
+### **Actual Result:**
+
+* The **Login button becomes unresponsive** after clicking.
+* No redirect occurs, and **no error message** is displayed.
+* User remains stuck on the login page.
+
+---
+
+### **Severity:**
+
+🔴 **High (Major Functional Issue)**
+This issue prevents users from accessing the system even with valid credentials.
+
+---
+
+### **Screenshot (Description):**
+
+A screenshot would show:
+
+* Email and password fields filled with valid data.
+* Login button clicked but no visible feedback or navigation change.
+* Browser console showing no network request triggered upon click.
+
+
+
+
+
 
