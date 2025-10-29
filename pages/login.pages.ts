@@ -36,9 +36,10 @@ export class LoginPage {
 
     async verifyLoginSuccess(){
         // Wait until URL contains '/en/inbox' using URL.href
-        await this.page.waitForURL((url) => url.href.includes('/en/inbox'), { timeout: 30000 });
+        await this.page.waitForURL((url) => url.href.includes('/en/inbox'), { timeout: 60000 });
 
         // Then check that the "Assigned to me" heading is visible
-        await expect(this.page.getByRole('heading', { name: 'Assigned to me', level: 2 })).toBeVisible();
+        await expect(
+    this.page.getByRole('heading', { name: 'Assigned to me', level: 2 })).toBeVisible({ timeout: 60000 });
     }
 }

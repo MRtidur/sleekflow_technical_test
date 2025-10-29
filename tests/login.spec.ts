@@ -1,7 +1,7 @@
 import {test, expect} from '@playwright/test';
 import { LoginPage } from '../pages/login.pages';
 import { usersForLogin } from '../fixtures/users';
-import { log } from 'console';
+
 
 test.describe('Login Flow', () => {
     let login: LoginPage;
